@@ -1,1 +1,9 @@
-{"name":"Disha Real Estate CRM","short_name":"Disha CRM","start_url":"./","display":"standalone","background_color":"#f5f6fa","theme_color":"#172033"}
+{
+  "name": "Disha Real Estate CRM",
+  "short_name": "Disha CRM",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f8fc",
+  "theme_color": "#0b5cab",
+  "icons": [{"src":"logo.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]
+}
