@@ -1,0 +1,1 @@
+V5 cloud-ready PWA. Supabase URL configured; paste the publishable key into index.html before hosting. Never use/share a secret key.
