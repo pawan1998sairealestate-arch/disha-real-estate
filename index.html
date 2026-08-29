@@ -30,7 +30,24 @@ async function auth(){const {data,error}=await sb.auth.getSession();if(error)con
 $('loginBtn').onclick=async()=>{const email=$('email').value.trim(),password=$('password').value;$('loginMsg').textContent='Signing in...';const {error}=await sb.auth.signInWithPassword({email,password});$('loginMsg').textContent=error?error.message:'';if(!error)auth()};
 sb.auth.onAuthStateChange((_e,s)=>{if(s){me=s.user;$('login').style.display='none';$('app').style.display='block';setTimeout(loadAll,0)}else{me=null;$('login').style.display='flex';$('app').style.display='none'}});$('logout').onclick=()=>sb.auth.signOut();
 async function q(table,opts={}){let query=sb.from(table).select('*');if(opts.order)query=query.order(opts.order,{ascending:opts.asc??false});const {data,error}=await query;if(error)throw error;return data||[]}
-async function loadAll(){try{[properties,clients,visits,tasks,diary,agents,ll,tx]=await Promise.all([q('properties',{order:'created_at'}),q('clients',{order:'created_at'}),q('visits',{order:'visit_date'}),q('tasks',{order:'task_date'}),q('diary_entries',{order:'entry_date'}),q('agents',{order:'created_at'}),q('leave_license',{order:'created_at'}),q('leave_license_transactions',{order:'transaction_date'})]);renderAll()}catch(e){console.error(e);alert('Cloud database tables are not ready yet. Please run setup.sql in Supabase SQL Editor once, then refresh this app.')}}
+async function loadAll(){try{[properties,clients,visits,tasks,diary,agents,ll,tx]=await Promise.all([q('properties',{order:'created_at'}),q('clients',{order:'created_at'}),q('visits',{order:'visit_date'}),q('tasks',{order:'task_date'}),q('diary_entries',{order:'entry_date'}),q('agents',{order:'created_at'}),q('leave_license',{order:'created_at'}),q('leave_license_transactions',{order:'transaction_date'})]);renderAll()}catch(e){console.error(e);async function loadAll(){
+  try{
+    [properties,clients,visits,tasks,diary,agents,ll,tx]=await Promise.all([
+      q('properties',{order:'created_at'}),
+      q('clients',{order:'created_at'}),
+      q('visits',{order:'visit_date'}),
+      q('tasks',{order:'task_date'}),
+      q('diary_entries',{order:'entry_date'}),
+      q('agents',{order:'created_at'}),
+      q('leave_license',{order:'created_at'}),
+      q('leave_license_transactions',{order:'transaction_date'})
+    ]);
+    renderAll();
+  }catch(e){
+    console.error(e);
+    alert('Cloud database tables are not ready yet.\nPlease run setup.sql in Supabase SQL Editor once, then refresh this app.');
+  }
+}}}
 async function insert(table,payload){const {data,error}=await sb.from(table).insert({...payload,owner_id:me.id}).select().single();if(error){alert(error.message);throw error}return data}
 async function update(table,id,payload){const {data,error}=await sb.from(table).update(payload).eq('id',id).select().single();if(error){alert(error.message);throw error}return data}
 async function del(table,id){if(!confirm('Delete this record?'))return;const {error}=await sb.from(table).delete().eq('id',id);if(error)alert(error.message);else await loadAll()}
