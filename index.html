@@ -48,7 +48,7 @@ async function loadAll(){try{[properties,clients,visits,tasks,diary,agents,ll,tx
     alert('Cloud database tables are not ready yet.\nPlease run setup.sql in Supabase SQL Editor once, then refresh this app.');
   }
 }}}
-async function insert(table,payload){const {data,error}=await sb.from(table).insert({...payload,owner_id:me.id}).select().single();if(error){alert(error.message);throw error}return data}
+async function insert(table,payload){const {data,error}=await sb.from(table).insert({...payload,user_id:me.id,owner_id:me.id}).select().single();if(error){alert(error.message);throw error}return data}
 async function update(table,id,payload){const {data,error}=await sb.from(table).update(payload).eq('id',id).select().single();if(error){alert(error.message);throw error}return data}
 async function del(table,id){if(!confirm('Delete this record?'))return;const {error}=await sb.from(table).delete().eq('id',id);if(error)alert(error.message);else await loadAll()}
 function renderAll(){renderDashboard();renderProps();renderClients();renderVisits();renderTasks();renderDiary();renderAgents();renderLL();renderTX();refreshSelectors()}
