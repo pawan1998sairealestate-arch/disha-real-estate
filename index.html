@@ -255,12 +255,17 @@ async function insert(table,payload){
   }
 
   /* user_id based tables */
-  else if(
-    table==='daily_diary' ||
-    table==='leave_license_transactions'
-  ){
-    finalPayload.user_id=me.id;
-  }
+  else if(table==='daily_diary'){
+
+  finalPayload.user_id=me.id;
+
+}
+
+else if(table==='leave_license_transactions'){
+
+  finalPayload.owner_id=me.id;
+
+}
 
   /* owner_id based tables */
   else if(
